@@ -1,0 +1,22 @@
+{
+  "name": "unknown",
+  "bg0": "#020504",
+  "bg1": "#262d2a",
+  "bg2": "#262d2a",
+  "bg3": "#313735",
+  "bg4": "#3c4340",
+
+  "fg": "#ffffff",
+
+  "red": "#ffdcd8",
+  "orange": "#cbe8ff",
+  "yellow": "#ceeae1",
+  "green": "#62b3a1",
+  "aqua": "#84d6c2",
+  "blue": "#cbe8ff",
+  "purple": "#aacbe4",
+
+  "grey0": "#3f4946",
+  "grey1": "#c3cec9",
+  "grey2": "#f3fdf8"
+}
