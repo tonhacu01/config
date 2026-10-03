@@ -20,6 +20,7 @@ hl.config({
 
         blur = {
             enabled = false,
+            passes  = 2   ,
         },
     },
 })

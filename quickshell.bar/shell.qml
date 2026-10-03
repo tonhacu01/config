@@ -3,10 +3,11 @@ import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Io
+
 import qs.modules
 import qs.AppLauncher
 import qs.Wallpaper
-
+import qs.ScreenCorners
 PanelWindow {
     id: bar
 
@@ -18,31 +19,32 @@ PanelWindow {
 
     margins {
         top: -5
-        left: 0   
-        right: 0  
+        left: 0
+        right: 0
     }
 
     implicitHeight: 70
-    implicitWidth: 1000
     color: "transparent"
 
+    // Reserve only 45px despite the visual window being 70px.
     exclusiveZone: 45
 
     // ─────────────────────────────────────────────
     // MATUGEN COLORS
     // ─────────────────────────────────────────────
-/*
+
     FileView {
         id: colorsFile
 
-        path: Quickshell.env("HOME") + "/.config/quickshell/colors.json"
+        path: Quickshell.env("HOME")
+            + "/.config/quickshell/colors.json"
 
         watchChanges: true
         onFileChanged: reload()
     }
 
     readonly property var colors: {
-        if (!colorsFile.loaded || colorsFile.text() === "")
+        if (!colorsFile.loaded || colorsFile.text() === "") {
             return {
                 bg0: "#040e0d",
                 bg1: "#0a1816",
@@ -64,118 +66,102 @@ PanelWindow {
                 grey1: "#5a4d3e",
                 grey2: "#c4b09a"
             }
+        }
 
         return JSON.parse(colorsFile.text())
     }
 
-*/
-
     // ─────────────────────────────────────────────
-    // LEFT - CURRENT WINDOW
+    // LEFT
     // ─────────────────────────────────────────────
 
     Pill {
-        anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
+        anchors {
+            left: parent.left
+            leftMargin: 20
+            verticalCenter: parent.verticalCenter
+        }
 
         icon: "pause"
         iconColor: Colors.aqua
+
         maxLabelWidth: 220
 
-        // Chỉ đổi FILL = 1 cho Pill này
-        iconAxes: {
-            "FILL": 1,
-            "wght": 400,
-            "GRAD": 0,
-            "opsz": 24
-        }
+        iconAxes: ({
+            FILL: 1,
+            wght: 400,
+            GRAD: 0,
+            opsz: 24
+        })
 
-        label: winPoller.value !== "" ? winPoller.value : "Desktop"
+        label: winPoller.value !== ""
+            ? winPoller.value
+            : "Desktop"
     }
 
-
     // ─────────────────────────────────────────────
-    // CENTER - CLOCK + WORKSPACES
+    // CENTER
     // ─────────────────────────────────────────────
 
     RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+        }
 
         spacing: 8
 
         Pill {
             icon: "nest_clock_farsight_analog"
-
             iconColor: Colors.orange
-
             label: clock.value
         }
 
-        Workspace {
-        }
+        Workspace {}
     }
-
 
     // ─────────────────────────────────────────────
     // RIGHT
     // ─────────────────────────────────────────────
 
     RowLayout {
-        anchors.right: parent.right
-        anchors.rightMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
+        anchors {
+            right: parent.right
+            rightMargin: 20
+            verticalCenter: parent.verticalCenter
+        }
 
         spacing: 8
 
-
-        // Battery
         Pill {
             icon: "battery_android_full"
-
             iconColor: Colors.green
-
             label: "100%"
         }
 
-
-        // Bluetooth
         Pill {
             icon: "bluetooth"
-
             iconColor: Colors.yellow
-
             label: "On"
         }
 
-
-        // Wi-Fi
         Pill {
             icon: "network_wifi"
-
             iconColor: Colors.purple
-
             label: "Aero 5G"
         }
 
-
-        // Volume
         Pill {
             icon: "volume_up"
-
             iconColor: Colors.green
-
             label: vol.value + "%"
         }
     }
-
 
     // ─────────────────────────────────────────────
     // POLLERS
     // ─────────────────────────────────────────────
 
-    // Active Window Title Poller
     Poller {
         id: winPoller
 
@@ -184,7 +170,6 @@ PanelWindow {
         interval: 300
     }
 
-    // Clock Poller
     Poller {
         id: clock
 
@@ -193,7 +178,6 @@ PanelWindow {
         interval: 60000
     }
 
-    // Volume Poller
     Poller {
         id: vol
 
@@ -202,8 +186,52 @@ PanelWindow {
         interval: 1000
     }
 
+    // ─────────────────────────────────────────────
+    // GLOBAL MODULES
+    // ─────────────────────────────────────────────
+
     AppLauncher {}
 
-    WallpaperManager { theme: ts.theme }
+    WallpaperManager {
+        theme: ts.theme
+    }
 
+    // =========================================================
+    // IPC
+    // =========================================================
+    //
+    // Usage:
+    //
+    //   qs ipc show
+    //   qs ipc call lockscreen lock
+    //   qs ipc call lockscreen unlock
+    //   qs ipc call lockscreen toggle
+    //
+    // =========================================================
+
+    IpcHandler {
+        target: "lockscreen"
+
+        function lock(): void {
+            lockScreen.lock()
+        }
+
+        function unlock(): void {
+            lockScreen.unlock()
+        }
+
+        function toggle(): void {
+            lockScreen.toggle()
+        }
+    }
+
+    // =========================================================
+    // LOCKSCREEN
+    // =========================================================
+
+    LockScreen {
+        id: lockScreen
+    }
+
+    ScreenCorners {}
 }

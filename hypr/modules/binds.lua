@@ -17,24 +17,25 @@ local quickshell = "./.config/hypr/scripts/quickshell.sh"
 ---------------------
 
 local mainMod = "SUPER"
-
+--> Super = Windows key
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("qs ipc call theme toggle"))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal))
 --> Terminal
+hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("qs ipc call notifications toggle"))
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 --> Close Windows
-
 hl.bind("SUPER + K", hl.dsp.exec_cmd(quickshell))
-
+--> Reload quickshell
 -- Applications/ Utilities
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(files))
 --> Windows Explorer :]
-hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
---> rofi launcher
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("qs ipc call launcher toggle"))
+--> quickshell launcher 
 hl.bind("CTRL + ALT + DELETE", hl.dsp.exec_cmd(power))
 --> rofi power menu
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(clipboard))
 --> rofi clipboard (wl clipboard)
-hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(wallpaper))
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("qs ipc call wallpaper toggle"))
 --> rofi wallpaper picker
 hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd(emoji))
 --> rofimoji
@@ -42,7 +43,7 @@ hl.bind(mainMod .. " + PERIOD", hl.dsp.exec_cmd(emoji))
 --> Windows action (pseudo) currently not in-use
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
 --> Windows Split
-hl.bind("SUPER + N", hl.dsp.exec_cmd("swaync-client -t"))
+hl.bind("SUPER + N", hl.dsp.exec_cmd("qs ipc call controlcenter toggle"))
 --> Notifications (SwayNC)
 hl.bind("SUPER + G", hl.dsp.exec_cmd("~/.config/waybar/scripts/launch.sh"))
 --> Reload waybar/ swaync
@@ -215,7 +216,7 @@ hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output"))
 ----   OTHERS    ----
 ---------------------
 
--- Square Mode
+-- Focus Mode
 
 hl.bind("ALT + F1", function ()
 
@@ -223,12 +224,12 @@ hl.bind("ALT + F1", function ()
     local gaps_out = hl.get_config("general.gaps_out")
     local rounding = hl.get_config("decoration.rounding")
 
-    local square_mode =
-        gaps_in.top == 5 and
-        gaps_out.top == 5 and
+    local focus_mode =
+        gaps_in.top == 0 and
+        gaps_out.top == 0 and
         rounding == 0
 
-    if square_mode then
+    if focus_mode then
 
         hl.exec_cmd("pkill qs; qs -d")
 
@@ -242,9 +243,9 @@ hl.bind("ALT + F1", function ()
 
         general = {
 
-            gaps_in = 5,
+            gaps_in = 0,
 
-            gaps_out = 5
+            gaps_out = 0
 
         },
 
@@ -257,7 +258,7 @@ hl.bind("ALT + F1", function ()
     })
 
     hl.exec_cmd(
-        "pkill qs; qs -p ~/.config/quickshell/Bar/shell.qml"
+        "pkill qs; qs -p ."
     )
 
 end)
