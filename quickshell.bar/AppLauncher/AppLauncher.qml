@@ -8,6 +8,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Effects
 
+
 Scope {
   id: root
   property var theme: DefaultTheme {}
@@ -76,7 +77,7 @@ Scope {
     }
 
     margins {
-        top: 45
+        top: 60
     }
 
     implicitHeight: launcherBox.height + 20

@@ -64,7 +64,7 @@ Scope {
         }
 
         margins {
-            top: 55
+            top: 70
         }
 
 

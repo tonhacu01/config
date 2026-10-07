@@ -1,14 +1,20 @@
 import Quickshell
 import Quickshell.Hyprland
+
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Io
 
 import qs.modules
+import qs.modules.ArchPill
+import qs.modules.ControlPill
 import qs.AppLauncher
 import qs.Wallpaper
 import qs.ScreenCorners
+import "theme-switcher"
+
 PanelWindow {
+
     id: bar
 
     anchors {
@@ -24,10 +30,12 @@ PanelWindow {
     }
 
     implicitHeight: 70
+
     color: "transparent"
 
     // Reserve only 45px despite the visual window being 70px.
     exclusiveZone: 45
+
 
     // ─────────────────────────────────────────────
     // MATUGEN COLORS
@@ -40,11 +48,14 @@ PanelWindow {
             + "/.config/quickshell/colors.json"
 
         watchChanges: true
+
         onFileChanged: reload()
     }
 
     readonly property var colors: {
+
         if (!colorsFile.loaded || colorsFile.text() === "") {
+
             return {
                 bg0: "#040e0d",
                 bg1: "#0a1816",
@@ -71,18 +82,21 @@ PanelWindow {
         return JSON.parse(colorsFile.text())
     }
 
+
     // ─────────────────────────────────────────────
     // LEFT
     // ─────────────────────────────────────────────
 
     Pill {
+
         anchors {
             left: parent.left
-            leftMargin: 20
+            leftMargin: 68
             verticalCenter: parent.verticalCenter
         }
 
         icon: "pause"
+
         iconColor: Colors.aqua
 
         maxLabelWidth: 220
@@ -99,11 +113,13 @@ PanelWindow {
             : "Desktop"
     }
 
+
     // ─────────────────────────────────────────────
     // CENTER
     // ─────────────────────────────────────────────
 
     RowLayout {
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
@@ -112,19 +128,25 @@ PanelWindow {
         spacing: 8
 
         Pill {
+
             icon: "nest_clock_farsight_analog"
+
             iconColor: Colors.orange
+
             label: clock.value
         }
 
         Workspace {}
+
     }
+
 
     // ─────────────────────────────────────────────
     // RIGHT
     // ─────────────────────────────────────────────
 
     RowLayout {
+
         anchors {
             right: parent.right
             rightMargin: 20
@@ -134,35 +156,50 @@ PanelWindow {
         spacing: 8
 
         Pill {
-            icon: "battery_android_full"
-            iconColor: Colors.green
-            label: "100%"
+
+            icon: "volume_up"
+
+            iconColor: Colors.aqua
+
+            label: vol.value + "%"
+
         }
 
         Pill {
-            icon: "bluetooth"
-            iconColor: Colors.yellow
-            label: "On"
-        }
 
-        Pill {
             icon: "network_wifi"
-            iconColor: Colors.purple
+
+            iconColor: '#ffb8e2'
+
             label: "Aero 5G"
         }
 
+
         Pill {
-            icon: "volume_up"
+
+            icon: "battery_android_full"
+
             iconColor: Colors.green
-            label: vol.value + "%"
+
+            label: "100%"
         }
+
+
+        ControlPill {
+
+            theme: ts.theme
+
+        }
+
     }
+
 
     // ─────────────────────────────────────────────
     // POLLERS
     // ─────────────────────────────────────────────
 
     Poller {
+
         id: winPoller
 
         command: "hyprctl activewindow -j | jq -r 'if .title != \"\" then .title else (.class // \"Desktop\") end'"
@@ -171,6 +208,7 @@ PanelWindow {
     }
 
     Poller {
+
         id: clock
 
         command: "date +%H:%M"
@@ -179,12 +217,14 @@ PanelWindow {
     }
 
     Poller {
+
         id: vol
 
         command: "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print int($2 * 100)}'"
 
         interval: 1000
     }
+
 
     // ─────────────────────────────────────────────
     // GLOBAL MODULES
@@ -193,45 +233,76 @@ PanelWindow {
     AppLauncher {}
 
     WallpaperManager {
+
         theme: ts.theme
+
     }
+
 
     // =========================================================
     // IPC
     // =========================================================
-    //
-    // Usage:
-    //
-    //   qs ipc show
-    //   qs ipc call lockscreen lock
-    //   qs ipc call lockscreen unlock
-    //   qs ipc call lockscreen toggle
-    //
-    // =========================================================
 
     IpcHandler {
+
         target: "lockscreen"
 
         function lock(): void {
+
             lockScreen.lock()
+
         }
 
         function unlock(): void {
+
             lockScreen.unlock()
+
         }
 
         function toggle(): void {
+
             lockScreen.toggle()
+
         }
+
     }
+
 
     // =========================================================
     // LOCKSCREEN
     // =========================================================
 
     LockScreen {
+
         id: lockScreen
+
     }
 
     ScreenCorners {}
+
+
+    ThemeSwitcher {
+
+        id: ts
+
+    }
+
+
+    ArchPill {
+
+        theme: ts.theme
+
+        anchors {
+
+            left: parent.left
+
+            leftMargin: 20
+
+            verticalCenter: parent.verticalCenter
+
+        }
+
+    }
+
 }
+

@@ -1,4 +1,4 @@
-
+local colors = require("colors")
 
 -- Configs
 require("modules.env")

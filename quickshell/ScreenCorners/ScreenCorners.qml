@@ -1,122 +1,136 @@
 import QtQuick
+import QtQuick.Shapes
 import Quickshell
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
-Scope {
+ShellRoot {
     id: root
 
-    property int rounding: 10
+    readonly property int radius: 12
+    readonly property int scaleFactor: 4
+    readonly property color cornerColor: "#000000"
 
-    function isFullscreenOn(screen) {
-        const monitor = Hyprland.monitorFor(screen)
-        if (!monitor)
-            return false
+    // =========================================================
+    // TOP-LEFT
+    // =========================================================
+    component CornerShape: Shape {
+        width: root.radius
+        height: root.radius
 
-        const workspaces = Hyprland.workspaces.values.filter(
-            ws => ws.monitor && ws.monitor.name === monitor.name
-        )
+        ShapePath {
+            fillColor: root.cornerColor
+            strokeWidth: 0
 
-        return workspaces.some(ws =>
-            ws.active &&
-            ws.toplevels.values.some(window =>
-                window.wayland?.fullscreen === true
-            )
-        )
+            // Góc ngoài cùng
+            startX: 0
+            startY: root.radius
+
+            // Đi lên theo cạnh trái
+            PathLine {
+                x: 0
+                y: 0
+            }
+
+            // Đi sang phải theo cạnh trên
+            PathLine {
+                x: root.radius
+                y: 0
+            }
+
+            // Cung tròn quay về góc dưới-trái
+            PathArc {
+                x: 0
+                y: root.radius
+
+                radiusX: root.radius
+                radiusY: root.radius
+
+                direction: PathArc.Counterclockwise
+            }
+        }
     }
 
-    component Corner: PanelWindow {
-        id: corner
-
-        required property int cornerType
-        required property var targetScreen
-
-        screen: targetScreen
-
-        exclusionMode: ExclusionMode.Ignore
-
-        WlrLayershell.namespace: "quickshell:screenCorners"
-        WlrLayershell.layer: WlrLayer.Overlay
+    // =========================================================
+    // TOP-LEFT
+    // =========================================================
+    PanelWindow {
+        width: root.radius
+        height: root.radius
 
         color: "transparent"
 
-        visible: !root.isFullscreenOn(targetScreen)
+        exclusionMode: ExclusionMode.Ignore
 
-        implicitWidth: root.rounding
-        implicitHeight: root.rounding
+        anchors.top: true
+        anchors.left: true
 
-        anchors {
-            top: cornerType === 0 || cornerType === 1
-            bottom: cornerType === 2 || cornerType === 3
-            left: cornerType === 0 || cornerType === 2
-            right: cornerType === 1 || cornerType === 3
-        }
+        CornerShape {}
+    }
 
-        Canvas {
-            anchors.fill: parent
+    // =========================================================
+    // TOP-RIGHT
+    // =========================================================
+    PanelWindow {
+        width: root.radius
+        height: root.radius
 
-            onPaint: {
-                const ctx = getContext("2d")
-                const r = width
+        color: "transparent"
 
-                ctx.clearRect(0, 0, width, height)
-                ctx.fillStyle = "black"
-                ctx.beginPath()
+        exclusionMode: ExclusionMode.Ignore
 
-                if (cornerType === 0) {
-                    ctx.moveTo(0, r)
-                    ctx.arc(r, r, r, Math.PI, 1.5 * Math.PI)
-                    ctx.lineTo(0, 0)
-                } else if (cornerType === 1) {
-                    ctx.moveTo(0, 0)
-                    ctx.lineTo(r, 0)
-                    ctx.arc(0, r, r, 1.5 * Math.PI, 2 * Math.PI)
-                    ctx.lineTo(r, 0)
-                } else if (cornerType === 2) {
-                    ctx.moveTo(0, 0)
-                    ctx.lineTo(0, r)
-                    ctx.arc(r, 0, r, 0.5 * Math.PI, Math.PI)
-                    ctx.lineTo(0, r)
-                } else {
-                    ctx.moveTo(0, r)
-                    ctx.lineTo(r, r)
-                    ctx.lineTo(r, 0)
-                    ctx.arc(0, 0, r, 0, Math.PI / 2, false)
-                    ctx.lineTo(0, r)
-                }
+        anchors.top: true
+        anchors.right: true
 
-                ctx.closePath()
-                ctx.fill()
+        CornerShape {
+            transform: Rotation {
+                origin.x: root.radius / 2
+                origin.y: root.radius / 2
+                angle: 90
             }
-
-            Component.onCompleted: requestPaint()
         }
     }
 
-    Variants {
-        model: Quickshell.screens
+    // =========================================================
+    // BOTTOM-RIGHT
+    // =========================================================
+    PanelWindow {
+        width: root.radius
+        height: root.radius
 
-        Scope {
-            required property var modelData
+        color: "transparent"
 
-            Corner {
-                targetScreen: modelData
-                cornerType: 0
+        exclusionMode: ExclusionMode.Ignore
+
+        anchors.bottom: true
+        anchors.right: true
+
+        CornerShape {
+            transform: Rotation {
+                origin.x: root.radius / 2
+                origin.y: root.radius / 2
+                angle: 180
             }
+        }
+    }
 
-            Corner {
-                targetScreen: modelData
-                cornerType: 1
-            }
+    // =========================================================
+    // BOTTOM-LEFT
+    // =========================================================
+    PanelWindow {
+        width: root.radius
+        height: root.radius
 
-            Corner {
-                targetScreen: modelData
-                cornerType: 2
-            }
+        color: "transparent"
 
-            Corner {
-                targetScreen: modelData
-                cornerType: 3
+        exclusionMode: ExclusionMode.Ignore
+
+        anchors.bottom: true
+        anchors.left: true
+
+        CornerShape {
+            transform: Rotation {
+                origin.x: root.radius / 2
+                origin.y: root.radius / 2
+                angle: 270
             }
         }
     }

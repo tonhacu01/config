@@ -1,22 +1,22 @@
 {
   "name": "unknown",
-  "bg0": "#040807",
-  "bg1": "#191f1d",
-  "bg2": "#0e1513",
-  "bg3": "#191f1d",
-  "bg4": "#232927",
+  "bg0": "#090f10",
+  "bg1": "#161d1d",
+  "bg2": "#1a2121",
+  "bg3": "#252b2b",
+  "bg4": "#303636",
 
-  "fg": "#ffffff",
+  "fg": "#dde4e3",
 
-  "red": "#ffd2cc",
-  "orange": "#c0e0fa",
-  "yellow": "#c7e2d9",
-  "green": "#9aecd8",
-  "aqua": "#9aecd8",
-  "blue": "#c0e0fa",
-  "purple": "#aacbe4",
+  "red": "#ffb4ab",
+  "orange": "#b5c7e9",
+  "yellow": "#b1cccd",
+  "green": "#80d4d8",
+  "aqua": "#80d4d8",
+  "blue": "#b5c7e9",
+  "purple": "#b5c7e9",
 
-  "grey0": "#3f4946",
-  "grey1": "#aab4b0",
-  "grey2": "#d4dfda"
+  "grey0": "#3f4949",
+  "grey1": "#899393",
+  "grey2": "#bec8c9"
 }

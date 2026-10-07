@@ -6,6 +6,7 @@ ShellRoot {
     id: root
 
     readonly property int radius: 12
+    readonly property int scaleFactor: 4
     readonly property color cornerColor: "#000000"
 
     // =========================================================

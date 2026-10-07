@@ -1,22 +1,22 @@
 import QtQuick
 
 QtObject {
-    readonly property color bgBase: "#0e1513"
-    readonly property color bgSurface: "#232927"
+    readonly property color bgBase: "#0e1415"
+    readonly property color bgSurface: "#1a2121"
     readonly property color bgOverlay: "#000000"
-    readonly property color bgHover: "#2d3432"
-    readonly property color bgSelected: "#7c968e"
-    readonly property color bgBorder: "#88938f"
+    readonly property color bgHover: "#252b2b"
+    readonly property color bgSelected: "#324b4c"
+    readonly property color bgBorder: "#3f4949"
 
-    readonly property color textPrimary: "#ffffff"
-    readonly property color textSecondary: "#d4dfda"
-    readonly property color textMuted: "#aab4b0"
+    readonly property color textPrimary: "#dde4e3"
+    readonly property color textSecondary: "#bec8c9"
+    readonly property color textMuted: "#899393"
 
-    readonly property color accentPrimary: "#9aecd8"
-    readonly property color accentCyan: "#c7e2d9"
-    readonly property color accentGreen: "#c0e0fa"
-    readonly property color accentOrange: "#7595ac"
-    readonly property color accentRed: "#ffd2cc"
+    readonly property color accentPrimary: "#80d4d8"
+    readonly property color accentCyan: "#b1cccd"
+    readonly property color accentGreen: "#b5c7e9"
+    readonly property color accentOrange: "#364764"
+    readonly property color accentRed: "#ffb4ab"
 
     readonly property color urgencyLow: textMuted
     readonly property color urgencyNormal: accentPrimary

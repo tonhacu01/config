@@ -262,3 +262,6 @@ hl.bind("ALT + F1", function ()
     )
 
 end)
+
+-- Bar mode
+hl.bind("ALT + F2", hl.dsp.exec_cmd("pkill qs; qs -p ~/.config/quickshell.bar"))
